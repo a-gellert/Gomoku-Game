@@ -1,6 +1,6 @@
-﻿namespace Gomoku.GameEngine
+﻿namespace Gomoku.Core.Enums
 {
-    public enum Elements : byte
+    public enum Elements
     {
         /// <summary>
         /// This is a black stone
@@ -15,6 +15,6 @@
         /// <summary>
         /// Empty space on a board. This is the only place where you can put the your stone
         /// </summary>
-        EMPTY_CELL = ' '
+        EMPTY_CELL = '+'
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace Gomoku.GameEngine.Enums
+﻿namespace Gomoku.Core.Enums
 {
     public enum GameStates : byte
     {

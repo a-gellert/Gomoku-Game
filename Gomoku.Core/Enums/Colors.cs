@@ -1,4 +1,4 @@
-﻿namespace Gomoku.GameEngine
+﻿namespace Gomoku.Core.Enums
 {
     public enum Colors : byte
     {
