@@ -26,6 +26,12 @@ namespace Gomoku.Core.Core
 
         public bool MakeMove(Point point)
         {
+            if (MovesCounter == 1)
+            {
+                Board.Add(new Point(7,7), Colors.Black);
+                MovesCounter++;
+                return true;
+            }
             bool mayPutOn = MayPutOn(point);
 
             if (mayPutOn)
@@ -78,6 +84,7 @@ namespace Gomoku.Core.Core
             string str = "";
             for (int i = BoardSize - 1; i >= 0; i--)
             {
+                str += i + 1+"\t";
                 for (int j = 0; j < BoardSize; j++)
                 {
                     str += Board.GameBoard[j, i] + " ";

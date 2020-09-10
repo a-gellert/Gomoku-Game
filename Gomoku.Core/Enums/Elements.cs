@@ -15,6 +15,11 @@
         /// <summary>
         /// Empty space on a board. This is the only place where you can put the your stone
         /// </summary>
-        EMPTY_CELL = '+'
+        EMPTY_CELL = '+',
+
+        /// <summary>
+        /// Empty space on a board. This is the only place where you can put the your stone
+        /// </summary>
+        NONE = '@'
     }
 }

@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Direction.cs" />
+    <Compile Include="GamePatterns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simpler.cs" />
     <Compile Include="Solver.cs" />
   </ItemGroup>
   <ItemGroup>
