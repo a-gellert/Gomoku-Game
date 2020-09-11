@@ -10,37 +10,12 @@
             X = x;
             Y = y;
         }
-        /// <summary>
-        /// Returns new point object shifted left to "delta" points
-        /// </summary>
-        public Point ShiftLeft(int delta = 1)
+        public static bool Compare(Point point1, Point point2)
         {
-            return new Point(X - delta, Y);
-        }
+            int first = point1.X * point1.X + point1.Y * point1.Y;
+            int second = point2.X * point2.X + point2.Y * point2.Y;
 
-        /// <summary>
-        /// Returns new point object shifted right to "delta" points
-        /// </summary>
-        public Point ShiftRight(int delta = 1)
-        {
-            return new Point(X + delta, Y);
-        }
-
-        /// <summary>
-        /// Returns new point object shifted top "delta" points
-        /// </summary>
-        public Point ShiftTop(int delta = 1)
-        {
-            return new Point(X, Y + delta);
-        }
-
-        /// <summary>
-        /// Returns new point object shifted bottom "delta" points
-        /// </summary>
-        public Point ShiftBottom(int delta = 1)
-        {
-            return new Point(X, Y - delta);
-
+            return first > second;
         }
         public bool IsOutOf(int size)
         {

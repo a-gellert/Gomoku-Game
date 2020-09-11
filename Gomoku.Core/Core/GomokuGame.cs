@@ -24,6 +24,16 @@ namespace Gomoku.Core.Core
             GetState();
         }
 
+        public void Restart()
+        {
+            Board = new Board(BoardSize);
+            MovesCounter = 1;
+            _turnTimeIsOver = false;
+            State = GameStates.NOT_STARTED;
+            _hasFive = false;
+            GetState();
+        }
+
         public bool MakeMove(Point point)
         {
             if (MovesCounter == 1)
@@ -90,6 +100,16 @@ namespace Gomoku.Core.Core
                     str += Board.GameBoard[j, i] + " ";
                 }
                 str += "\n";
+            }
+            str += "\n\t";
+            for (int i = 0; i < BoardSize; i++)
+            {
+                if (i == 9)
+                {
+                    str += 0 + " ";
+                    continue;
+                }
+                str += i % 10 + 1 + " ";
             }
             return str;
         }

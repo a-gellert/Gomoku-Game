@@ -65,7 +65,7 @@
 
             }
             Console.WriteLine(game.State.ToString());
-            game.Board.wonPoints.ForEach(x => Console.WriteLine(x));
+            game.Board.WonPoints.ForEach(x => Console.WriteLine(x));
 
             Console.ReadLine();
         }

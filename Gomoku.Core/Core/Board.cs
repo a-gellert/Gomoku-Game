@@ -13,13 +13,13 @@ namespace Gomoku.Core.Core
         private char _blackStone = (char)Elements.BLACK_STONE;
         private char _whiteStone = (char)Elements.WHITE_STONE;
 
-        public List<Point> wonPoints;
+        public List<Point> WonPoints { get; private set; }
 
         public Board(int size)
         {
             Size = size;
             GameBoard = InitialFill();
-            wonPoints = new List<Point>();
+            WonPoints = new List<Point>();
         }
 
         private char[,] InitialFill()
@@ -78,8 +78,8 @@ namespace Gomoku.Core.Core
 
         private bool HorizontalCheck(int x, int y)
         {
-            wonPoints.Clear();
-            wonPoints.Add(new Point(x , y ));
+            WonPoints.Clear();
+            WonPoints.Add(new Point(x , y ));
 
             int count = 1;
             bool rightLock = false;
@@ -90,7 +90,7 @@ namespace Gomoku.Core.Core
                 if (!rightLock && x + i < Size && GameBoard[x + i, y] == GameBoard[x, y])
                 {
                     count++;
-                    wonPoints.Add(new Point(x + i, y ));
+                    WonPoints.Add(new Point(x + i, y ));
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace Gomoku.Core.Core
                 if (!leftLock && x - i >= 0 && GameBoard[x - i, y] == GameBoard[x, y])
                 {
                     count++;
-                    wonPoints.Add(new Point(x - i, y ));
+                    WonPoints.Add(new Point(x - i, y ));
                 }
                 else
                 {
@@ -119,8 +119,8 @@ namespace Gomoku.Core.Core
         }
         private bool VerticalCheck(int x, int y)
         {
-            wonPoints.Clear();
-            wonPoints.Add(new Point(x , y ));
+            WonPoints.Clear();
+            WonPoints.Add(new Point(x , y ));
 
             int count = 1;
             bool topLock = false;
@@ -131,7 +131,7 @@ namespace Gomoku.Core.Core
                 if (!topLock && y + i < Size && GameBoard[x, y + i] == GameBoard[x, y])
                 {
                     count++;
-                    wonPoints.Add(new Point(x , y  + i));
+                    WonPoints.Add(new Point(x , y  + i));
                 }
                 else
                 {
@@ -141,7 +141,7 @@ namespace Gomoku.Core.Core
                 if (!bottomLock && y - i >= 0 && GameBoard[x, y - i] == GameBoard[x, y])
                 {
                     count++;
-                    wonPoints.Add(new Point(x , y  - i));
+                    WonPoints.Add(new Point(x , y  - i));
                 }
                 else
                 {
@@ -160,8 +160,8 @@ namespace Gomoku.Core.Core
         }
         private bool FirstDiagonalCheck(int x, int y)
         {
-            wonPoints.Clear();
-            wonPoints.Add(new Point(x , y ));
+            WonPoints.Clear();
+            WonPoints.Add(new Point(x , y ));
 
             int count = 1;
 
@@ -173,7 +173,7 @@ namespace Gomoku.Core.Core
                 if (!leftTopLock && x - i >= 0 && y + i < Size && GameBoard[x - i, y + i] == GameBoard[x, y])
                 {
                     count++;
-                    wonPoints.Add(new Point(x  - i, y  + i));
+                    WonPoints.Add(new Point(x  - i, y  + i));
                 }
                 else
                 {
@@ -183,7 +183,7 @@ namespace Gomoku.Core.Core
                 if (!bottomRightLock && x + i < Size && y - i >= 0 && GameBoard[x + i, y - i] == GameBoard[x, y])
                 {
                     count++;
-                    wonPoints.Add(new Point(x  + i, y  - i));
+                    WonPoints.Add(new Point(x  + i, y  - i));
                 }
                 else
                 {
@@ -203,8 +203,8 @@ namespace Gomoku.Core.Core
         }
         private bool SecondDiagonalCheck(int x, int y)
         {
-            wonPoints.Clear();
-            wonPoints.Add(new Point(x , y ));
+            WonPoints.Clear();
+            WonPoints.Add(new Point(x , y ));
 
             int count = 1;
 
@@ -216,7 +216,7 @@ namespace Gomoku.Core.Core
                 if (!leftBottomLock && x - i >= 0 && y - i >= 0 && GameBoard[x - i, y - i] == GameBoard[x, y])
                 {
                     count++;
-                    wonPoints.Add(new Point(x  - i, y  - i));
+                    WonPoints.Add(new Point(x  - i, y  - i));
                 }
                 else
                 {
@@ -226,7 +226,7 @@ namespace Gomoku.Core.Core
                 if (!topRightLock && x + i < Size && y + i < Size && GameBoard[x + i, y + i] == GameBoard[x, y])
                 {
                     count++;
-                    wonPoints.Add(new Point(x  + i, y  + i));
+                    WonPoints.Add(new Point(x  + i, y  + i));
                 }
                 else
                 {

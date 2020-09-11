@@ -1,0 +1,29 @@
+﻿<Window x:Class="Gomoku.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gomoku.WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="658" Width="988" ResizeMode="CanMinimize">
+    <Grid>
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="600" Margin="10,10,0,0" VerticalAlignment="Top" Width="600" MouseDown="Canvas_MouseDown">
+            <Canvas.Background>
+                <ImageBrush ImageSource="stuff/board.png"/>
+            </Canvas.Background>
+        </Canvas>
+        <TextBox x:Name="moves" HorizontalAlignment="Left" Height="320" Margin="642,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="277" FontSize="18" FontFamily="Georgia"/>
+        <Grid Margin="642,58,211,490">
+            <RadioButton x:Name="radCompLeft" Content="Computer" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia" IsChecked="True"/>
+            <RadioButton x:Name="radHumanLeft" Content="Human" HorizontalAlignment="Left" Margin="0,34,0,-7" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" Height="22" FontSize="18" FontFamily="Georgia"/>
+        </Grid>
+        <Grid Margin="804,58,63,490">
+            <RadioButton x:Name="radCompRight" Content="Computer" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia" IsChecked="True"/>
+            <RadioButton x:Name="radHumanRight" Content="Human" HorizontalAlignment="Left" Margin="0,34,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia"/>
+        </Grid>
+        <Label x:Name="label" Content="Player 1" HorizontalAlignment="Left" Margin="642,10,0,0" VerticalAlignment="Top" Width="115" Height="37" FontSize="18" FontFamily="Georgia"/>
+        <Label x:Name="label_Copy" Content="Player 2" HorizontalAlignment="Left" Margin="804,10,0,0" VerticalAlignment="Top" Width="115" Height="37" FontSize="18" FontFamily="Georgia"/>
+        <Button x:Name="start" Content="Start" HorizontalAlignment="Left" Margin="742,177,0,0" VerticalAlignment="Top" Width="75" FontSize="18" FontFamily="Georgia" Background="#FFADECE6" Foreground="#FF3E3E3E" BorderBrush="#FF171C78" Click="Button_Click"/>
+        <Label x:Name="label_Copy1" Content="Moves" HorizontalAlignment="Left" Margin="642,234,0,0" VerticalAlignment="Top" Width="115" Height="36" FontSize="18" FontFamily="Georgia"/>
+    </Grid>
+</Window>

@@ -6,12 +6,10 @@ using System.Linq;
 
 namespace Gomoku.AI
 {
-    public class Solver
+    public class Solver : Player
     {
         private static readonly Random random = new Random();
 
-        private int _x;
-        private int _y;
         private Dictionary<string, int> _patterns = GamePatterns.Patterns;
         private List<Point> _potentialPoints;
         private Dictionary<Point, int> _potMoves;
@@ -29,7 +27,7 @@ namespace Gomoku.AI
             // _move = color == Colors.Black ? 1 : 2;
         }
 
-        public Point MakeMove(Board board)
+        public override Point MakeMove(Board board)
         {
 
             _potMoves.Clear();
