@@ -315,7 +315,10 @@ namespace Gomoku.WPF
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            if (_firstIsBot || _secondIsBot)
+            {
+                return;
+            }
             _x = GetCell(e.GetPosition(canvas).X);
             _y = GetCell(e.GetPosition(canvas).Y);
 
