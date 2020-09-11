@@ -13,17 +13,19 @@
             </Canvas.Background>
         </Canvas>
         <TextBox x:Name="moves" HorizontalAlignment="Left" Height="320" Margin="642,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="277" FontSize="18" FontFamily="Georgia"/>
-        <Grid Margin="642,58,211,490">
-            <RadioButton x:Name="radCompLeft" Content="Computer" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia" IsChecked="True"/>
-            <RadioButton x:Name="radHumanLeft" Content="Human" HorizontalAlignment="Left" Margin="0,34,0,-7" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" Height="22" FontSize="18" FontFamily="Georgia"/>
+        <Grid Margin="642,58,211,452">
+            <RadioButton x:Name="radMediumLeft" Content="Medium(AI)" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia" IsChecked="True"/>
+            <RadioButton x:Name="radEasyLeft" Content="Easy(AI)" HorizontalAlignment="Left" Margin="0,24,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" Height="22" FontSize="18" FontFamily="Georgia"/>
+            <RadioButton x:Name="radHumanLeft" Content="Human" HorizontalAlignment="Left" Margin="0,51,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" Height="22" FontSize="18" FontFamily="Georgia"/>
         </Grid>
-        <Grid Margin="804,58,63,490">
-            <RadioButton x:Name="radCompRight" Content="Computer" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia" IsChecked="True"/>
-            <RadioButton x:Name="radHumanRight" Content="Human" HorizontalAlignment="Left" Margin="0,34,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia"/>
+        <Grid Margin="804,58,39,457">
+            <RadioButton x:Name="radMediumRight" Content="Medium(AI)" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia" IsChecked="True"/>
+            <RadioButton x:Name="radEasyRight" Content="Easy(AI)" HorizontalAlignment="Left" Margin="0,24,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia"/>
+            <RadioButton x:Name="radHumanRight" Content="Human" HorizontalAlignment="Left" Margin="0,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.018,-3.7" FontSize="18" FontFamily="Georgia"/>
         </Grid>
         <Label x:Name="label" Content="Player 1" HorizontalAlignment="Left" Margin="642,10,0,0" VerticalAlignment="Top" Width="115" Height="37" FontSize="18" FontFamily="Georgia"/>
         <Label x:Name="label_Copy" Content="Player 2" HorizontalAlignment="Left" Margin="804,10,0,0" VerticalAlignment="Top" Width="115" Height="37" FontSize="18" FontFamily="Georgia"/>
-        <Button x:Name="start" Content="Start" HorizontalAlignment="Left" Margin="742,177,0,0" VerticalAlignment="Top" Width="75" FontSize="18" FontFamily="Georgia" Background="#FFADECE6" Foreground="#FF3E3E3E" BorderBrush="#FF171C78" Click="Button_Click"/>
+        <Button x:Name="start" Content="Start" HorizontalAlignment="Left" Margin="758,182,0,0" VerticalAlignment="Top" Width="75" FontSize="18" FontFamily="Georgia" Background="#FFADECE6" Foreground="#FF3E3E3E" BorderBrush="#FF171C78" Click="Button_Click"/>
         <Label x:Name="label_Copy1" Content="Moves" HorizontalAlignment="Left" Margin="642,234,0,0" VerticalAlignment="Top" Width="115" Height="36" FontSize="18" FontFamily="Georgia"/>
     </Grid>
 </Window>

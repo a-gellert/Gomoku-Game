@@ -42,12 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Direction.cs" />
+    <Compile Include="Easy.cs" />
     <Compile Include="GamePatterns.cs" />
     <Compile Include="Human.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simpler.cs" />
     <Compile Include="Medium.cs" />
+    <Compile Include="Solver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gomoku.Core\Gomoku.Core.csproj">

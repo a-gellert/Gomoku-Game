@@ -3,17 +3,11 @@ using Gomoku.Core.Core;
 using Gomoku.Core.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Point = Gomoku.Core.Core.Point;
@@ -36,8 +30,11 @@ namespace Gomoku.WPF
 
         GameStates run = GameStates.GAME_IS_RUNNING;
 
-        private Solver solverBlack;
-        private Solver solverWhite;
+        private Medium mediumBlack;
+        private Medium mediumWhite;
+
+        private Easy easyBlack;
+        private Easy easyWhite;
 
         private Human humanBlack;
         private Human humanWhite;
@@ -46,7 +43,10 @@ namespace Gomoku.WPF
         private Player whitePlayer;
         private int _x;
         private int _y;
-        private bool isMoveDone;
+
+        private bool _firstIsBot = true;
+        private bool _secondIsBot = true;
+        private Point _point;
 
         public MainWindow()
         {
@@ -65,40 +65,38 @@ namespace Gomoku.WPF
 
         private void timerTick(object sender, EventArgs e)
         {
-            if (_isBlack)
+            if (_isBlack && !_firstIsBot)
             {
-                while (_game.State == run)
-                {
-                    Point move = radCompLeft.IsChecked == true ? new Point(0, 0) : SetPoint() ;
-
-                    move = blackPlayer.MakeMove(_game.Board);
-                    if (_game.MakeMove(move))
-                    {
-                        Image black = new Image();
-                        SetImage(black, move.X, move.Y);
-                        moves.Text += "b" + move.ToString();
-                        _isBlack = !_isBlack;
-                        break;
-                    }
-                }
+                timer.Stop();
+                return;
             }
-            else
+            else if (!_isBlack && !_secondIsBot)
             {
-                while (_game.State == run)
+                timer.Stop();
+                return;
+            }
+
+            DoMove();
+
+        }
+
+        private void DoMove()
+        {
+            Player player = _isBlack ? blackPlayer : whitePlayer;
+            string liter = _isBlack ? "B" : "W";
+
+            while (_game.State == run)
+            {
+                Point move = _point;
+
+                move = player.MakeMove(_game.Board);
+                if (_game.MakeMove(move))
                 {
-                    Point move = radCompRight.IsChecked == true ? new Point(0, 0) : SetPoint();
-
-                    move = whitePlayer.MakeMove(_game.Board);
-                    // move = ToMove(Console.ReadLine());
-                    if (_game.MakeMove(move))
-                    {
-                        Image white = new Image();
-                        SetImage(white, move.X, move.Y);
-                        moves.Text += "w" + move.ToString() + "\n";
-                        _isBlack = !_isBlack;
-                        break;
-                    }
-
+                    Image black = new Image();
+                    SetImage(black, move.X, move.Y);
+                    moves.Text += liter + move.ToString();
+                    _isBlack = !_isBlack;
+                    break;
                 }
             }
             if (_game.State == GameStates.BLACK_WON)
@@ -119,9 +117,28 @@ namespace Gomoku.WPF
             }
         }
 
-        private Point SetPoint()
+        private void SetPoint(int x, int y)
         {
-            throw new NotImplementedException();
+            if (_isBlack && !_firstIsBot)
+            {
+                timerStart();
+                humanBlack.SetPoint(x, y);
+            }
+            else if (_isBlack && _firstIsBot)
+            {
+                _point = new Point(0, 0);
+            }
+            else if (!_isBlack && !_secondIsBot)
+            {
+                timerStart();
+                humanWhite.SetPoint(x, y);
+            }
+            else if (!_isBlack && _secondIsBot)
+            {
+                _point = new Point(0, 0);
+            }
+
+            timer.Start();
         }
 
         private void ShowWinner(string msg)
@@ -163,12 +180,15 @@ namespace Gomoku.WPF
             SetPlayers();
             Restart();
 
-            timerStart();
-
+            if (_firstIsBot)
+            {
+                timerStart();
+            }
         }
 
         private void Restart()
         {
+            moves.Text = "";
             _isBlack = true;
             canvas.Children.Clear();
             _game.Restart();
@@ -177,30 +197,84 @@ namespace Gomoku.WPF
 
         private void SetPlayers()
         {
-            if (radCompLeft.IsChecked == true && radCompRight.IsChecked == true)
+            if (radMediumLeft.IsChecked == true && radMediumRight.IsChecked == true)
             {
-                solverBlack = new Solver(Core.Enums.Colors.Black);
-                solverWhite = new Solver(Core.Enums.Colors.White);
+                mediumBlack = new Medium(Core.Enums.Colors.Black);
+                mediumWhite = new Medium(Core.Enums.Colors.White);
 
-                blackPlayer = solverBlack;
-                whitePlayer = solverWhite;
+                blackPlayer = mediumBlack;
+                whitePlayer = mediumWhite;
+
+                _firstIsBot = true;
+                _secondIsBot = true;
             }
-            else if (radCompLeft.IsChecked == true && radHumanRight.IsChecked == true)
+            else if (radMediumLeft.IsChecked == true && radEasyRight.IsChecked == true)
             {
-                solverBlack = new Solver(Core.Enums.Colors.Black);
+                easyBlack = new Easy(Core.Enums.Colors.Black);
+                easyWhite = new Easy(Core.Enums.Colors.White);
+
+                blackPlayer = easyBlack;
+                whitePlayer = easyWhite;
+
+                _firstIsBot = true;
+                _secondIsBot = true;
+            }
+            else if (radMediumLeft.IsChecked == true && radHumanRight.IsChecked == true)
+            {
+                mediumBlack = new Medium(Core.Enums.Colors.Black);
                 humanWhite = new Human();
 
-                blackPlayer = solverBlack;
+                blackPlayer = mediumBlack;
                 whitePlayer = humanWhite;
+
+                _firstIsBot = true;
+                _secondIsBot = false;
             }
-            else if (radHumanLeft.IsChecked == true && radCompRight.IsChecked == true)
+
+            else if (radEasyLeft.IsChecked == true && radEasyRight.IsChecked == true)
+            {
+                easyBlack = new Easy(Core.Enums.Colors.Black);
+                easyWhite = new Easy(Core.Enums.Colors.White);
+
+                blackPlayer = easyBlack;
+                whitePlayer = easyWhite;
+
+                _firstIsBot = true;
+                _secondIsBot = true;
+            }
+            else if (radEasyLeft.IsChecked == true && radMediumRight.IsChecked == true)
+            {
+                easyBlack = new Easy(Core.Enums.Colors.Black);
+                mediumWhite = new Medium(Core.Enums.Colors.White);
+
+                blackPlayer = easyBlack;
+                whitePlayer = mediumWhite;
+
+                _firstIsBot = true;
+                _secondIsBot = true;
+            }
+            else if (radEasyLeft.IsChecked == true && radHumanRight.IsChecked == true)
+            {
+                easyBlack = new Easy(Core.Enums.Colors.Black);
+                humanWhite = new Human();
+
+                blackPlayer = easyBlack;
+                whitePlayer = humanWhite;
+
+                _firstIsBot = true;
+                _secondIsBot = false;
+            }
+
+            else if (radHumanLeft.IsChecked == true && radMediumRight.IsChecked == true)
             {
                 humanBlack = new Human();
-                solverWhite = new Solver(Core.Enums.Colors.White);
+                mediumWhite = new Medium(Core.Enums.Colors.White);
 
                 blackPlayer = humanBlack;
-                whitePlayer = solverWhite;
+                whitePlayer = mediumWhite;
 
+                _firstIsBot = false;
+                _secondIsBot = true;
             }
             else if (radHumanLeft.IsChecked == true && radHumanRight.IsChecked == true)
             {
@@ -210,6 +284,19 @@ namespace Gomoku.WPF
                 blackPlayer = humanBlack;
                 whitePlayer = humanWhite;
 
+                _firstIsBot = false;
+                _secondIsBot = false;
+            }
+            else if (radHumanLeft.IsChecked == true && radEasyRight.IsChecked == true)
+            {
+                humanBlack = new Human();
+                easyWhite = new Easy(Core.Enums.Colors.White);
+
+                blackPlayer = humanBlack;
+                whitePlayer = easyWhite;
+
+                _firstIsBot = false;
+                _secondIsBot = true;
             }
         }
         private void SetImage(Image image, int x, int y)
@@ -228,23 +315,15 @@ namespace Gomoku.WPF
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            
+
             _x = GetCell(e.GetPosition(canvas).X);
             _y = GetCell(e.GetPosition(canvas).Y);
 
-            Image image = new Image();
+            SetPoint(_x, _y);
 
-            if (radHumanLeft.IsChecked == true)
-            {
-                humanBlack.SetPoint(_x, _y);
-            }
-            else if (radHumanRight.IsChecked == true)
-            {
-                humanWhite.SetPoint(_x, _y);
-            }
-            SetImage(image, _x, _y);
+            DoMove();
 
-            moves.Text = _x.ToString() + " " + _y.ToString();
+            //timer.Start();
         }
 
         private int GetCell(double coord)

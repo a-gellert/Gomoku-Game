@@ -13,8 +13,8 @@
             GomokuGame game = new GomokuGame();
 
 
-            Solver solver1 = new Solver(Colors.Black);
-            Solver solver2 = new Solver(Colors.White);
+            Medium solver1 = new Medium(Colors.Black);
+            Medium solver2 = new Medium(Colors.White);
 
             DateTime turnTime = DateTime.UtcNow;
             TimeSpan timer;

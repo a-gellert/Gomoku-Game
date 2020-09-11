@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace Gomoku.AI
 {
-    public class Medium : Player
+    public class Easy : Player
     {
-        private Dictionary<string, int> _patterns = GamePatterns.MediumPatterns;
+        private Dictionary<string, int> _patterns = GamePatterns.EasyPatterns;
         private Colors _color;
         private Solver Solver;
 
-        public Medium(Colors color)
+        public Easy(Colors color)
         {
             Solver = new Solver(_patterns, color);
             _color = color;
