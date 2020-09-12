@@ -48,14 +48,14 @@ namespace Gomoku.WPF
         private bool _secondIsBot = true;
         private Point _point;
 
-        Ellipse ellipse;
+        Ellipse ellipseAim;
 
         public MainWindow()
         {
             _game = new GomokuGame();
             _isBlack = true;
             InitializeComponent();
-            ellipse = new Ellipse();
+            ellipseAim = new Ellipse();
         }
         private void timerStart()
         {
@@ -86,7 +86,7 @@ namespace Gomoku.WPF
         private void DoMove()
         {
             Player player = _isBlack ? blackPlayer : whitePlayer;
-            string liter = _isBlack ? "B" : "W";
+            string liter = _isBlack ? "\nB" : "W";
 
             while (_game.State == run)
             {
@@ -155,33 +155,37 @@ namespace Gomoku.WPF
 
             timer.Stop();
             List<Point> points = _game.Board.WonPoints;
-
-            Point start = points[0];
-            Point end = points[0];
-
-            for (int i = 0; i < points.Count; i++)
+            points.ForEach(p =>
             {
-                if (Point.Compare(start, points[i]))
-                {
-                    start = points[i];
-                }
-                if (!Point.Compare(end, points[i]))
-                {
-                    end = points[i];
-                }
-            }
-            Line winLine = new Line();
+                Ellipse ellipseWin = new Ellipse();
 
-            winLine.StrokeThickness = 3;
-            winLine.Stroke = Brushes.Tomato;
-            winLine.X1 = start.X * Offset + Border;
-            winLine.Y1 = start.Y * Offset + Border;
-            winLine.X2 = end.X * Offset + Border;
-            winLine.Y2 = end.Y * Offset + Border;
+                ellipseWin.Width = 16;
+                ellipseWin.Height = 16;
 
-            canvas.Children.Add(winLine);
+                Canvas.SetLeft(ellipseWin, p.X  * Offset + Border+8);
+                Canvas.SetTop(ellipseWin, p.Y * Offset + Border+8);
+
+
+                RadialGradientBrush myBrush = new RadialGradientBrush();
+
+                myBrush.GradientStops.Add(new GradientStop(System.Windows.Media.Colors.Red, 0.0));
+                if (!_isBlack)
+                {
+                    myBrush.GradientStops.Add(new GradientStop(System.Windows.Media.Colors.White, 1.0));
+                }
+                else
+                {
+                    myBrush.GradientStops.Add(new GradientStop(System.Windows.Media.Colors.Black, 1.0));
+                }
+
+                ellipseWin.Fill = myBrush;
+
+                canvas.Children.Add(ellipseWin);
+            });
+           
+
             MessageBox.Show(msg);
-            _game.Restart();
+            Restart();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -348,17 +352,17 @@ namespace Gomoku.WPF
             int x = GetCell(e.GetPosition(canvas).X);
             int y = GetCell(e.GetPosition(canvas).Y);
 
-            if (canvas.Children.Contains(ellipse))
+            if (canvas.Children.Contains(ellipseAim))
             {
-                var i = canvas.Children.IndexOf(ellipse);
+                var i = canvas.Children.IndexOf(ellipseAim);
                 canvas.Children.RemoveAt(i);
             }
 
-            ellipse.Width = 32;
-            ellipse.Height = 32;
+            ellipseAim.Width = 32;
+            ellipseAim.Height = 32;
 
-            Canvas.SetLeft(ellipse, x * Offset + Border);
-            Canvas.SetTop(ellipse, y * Offset + Border);
+            Canvas.SetLeft(ellipseAim, x * Offset + Border);
+            Canvas.SetTop(ellipseAim, y * Offset + Border);
 
             if (x>14 || x<0 || y>14 || y<0)
             {
@@ -367,14 +371,14 @@ namespace Gomoku.WPF
 
             if (_game.Board.GameBoard[x,y]=='+')
             {
-                ellipse.Fill = Brushes.Cyan;
+                ellipseAim.Fill = Brushes.Cyan;
             }
             else 
             {
-                ellipse.Fill = Brushes.Tomato;
+                ellipseAim.Fill = Brushes.Tomato;
             }
-            ellipse.Opacity = 0.5;
-            canvas.Children.Add(ellipse);
+            ellipseAim.Opacity = 0.5;
+            canvas.Children.Add(ellipseAim);
         }
     }
 }
