@@ -48,11 +48,14 @@ namespace Gomoku.WPF
         private bool _secondIsBot = true;
         private Point _point;
 
+        Ellipse ellipse;
+
         public MainWindow()
         {
             _game = new GomokuGame();
             _isBlack = true;
             InitializeComponent();
+            ellipse = new Ellipse();
         }
         private void timerStart()
         {
@@ -98,6 +101,7 @@ namespace Gomoku.WPF
                     _isBlack = !_isBlack;
                     break;
                 }
+                return;
             }
             if (_game.State == GameStates.BLACK_WON)
             {
@@ -119,7 +123,12 @@ namespace Gomoku.WPF
 
         private void SetPoint(int x, int y)
         {
-            if (_isBlack && !_firstIsBot)
+            if (_game.MovesCounter == 1 && !_firstIsBot)
+            {
+                timerStart();
+                humanBlack.SetPoint(7, 7);
+            }
+            else if (_isBlack && !_firstIsBot)
             {
                 timerStart();
                 humanBlack.SetPoint(x, y);
@@ -315,7 +324,7 @@ namespace Gomoku.WPF
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (_firstIsBot || _secondIsBot)
+            if (_firstIsBot && _secondIsBot)
             {
                 return;
             }
@@ -332,6 +341,40 @@ namespace Gomoku.WPF
         private int GetCell(double coord)
         {
             return (int)((coord - Border) / Offset);
+        }
+
+        private void Canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            int x = GetCell(e.GetPosition(canvas).X);
+            int y = GetCell(e.GetPosition(canvas).Y);
+
+            if (canvas.Children.Contains(ellipse))
+            {
+                var i = canvas.Children.IndexOf(ellipse);
+                canvas.Children.RemoveAt(i);
+            }
+
+            ellipse.Width = 32;
+            ellipse.Height = 32;
+
+            Canvas.SetLeft(ellipse, x * Offset + Border);
+            Canvas.SetTop(ellipse, y * Offset + Border);
+
+            if (x>14 || x<0 || y>14 || y<0)
+            {
+                return;
+            }
+
+            if (_game.Board.GameBoard[x,y]=='+')
+            {
+                ellipse.Fill = Brushes.Cyan;
+            }
+            else 
+            {
+                ellipse.Fill = Brushes.Tomato;
+            }
+            ellipse.Opacity = 0.5;
+            canvas.Children.Add(ellipse);
         }
     }
 }
