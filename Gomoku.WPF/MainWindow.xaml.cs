@@ -56,13 +56,14 @@ namespace Gomoku.WPF
             _isBlack = true;
             InitializeComponent();
             ellipseAim = new Ellipse();
+            canvas.Visibility = Visibility.Hidden;
         }
         private void timerStart()
         {
             timer = new DispatcherTimer();
 
             timer.Tick += new EventHandler(timerTick);
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 50);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             timer.Start();
         }
 
@@ -162,8 +163,8 @@ namespace Gomoku.WPF
                 ellipseWin.Width = 16;
                 ellipseWin.Height = 16;
 
-                Canvas.SetLeft(ellipseWin, p.X  * Offset + Border+8);
-                Canvas.SetTop(ellipseWin, p.Y * Offset + Border+8);
+                Canvas.SetLeft(ellipseWin, p.X * Offset + Border + 8);
+                Canvas.SetTop(ellipseWin, p.Y * Offset + Border + 8);
 
 
                 RadialGradientBrush myBrush = new RadialGradientBrush();
@@ -182,30 +183,32 @@ namespace Gomoku.WPF
 
                 canvas.Children.Add(ellipseWin);
             });
-           
+
 
             MessageBox.Show(msg);
-            Restart();
+            canvas.Visibility = Visibility.Collapsed;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            SetPlayers();
             Restart();
-
-            if (_firstIsBot)
-            {
-                timerStart();
-            }
         }
 
         private void Restart()
         {
+            canvas.Visibility = Visibility.Visible;
+
             moves.Text = "";
             _isBlack = true;
             canvas.Children.Clear();
             _game.Restart();
             timer?.Stop();
+
+            SetPlayers();
+            if (_firstIsBot)
+            {
+                timerStart();
+            }
         }
 
         private void SetPlayers()
@@ -364,16 +367,16 @@ namespace Gomoku.WPF
             Canvas.SetLeft(ellipseAim, x * Offset + Border);
             Canvas.SetTop(ellipseAim, y * Offset + Border);
 
-            if (x>14 || x<0 || y>14 || y<0)
+            if (x > 14 || x < 0 || y > 14 || y < 0)
             {
                 return;
             }
 
-            if (_game.Board.GameBoard[x,y]=='+')
+            if (_game.Board.GameBoard[x, y] == '+')
             {
                 ellipseAim.Fill = Brushes.Cyan;
             }
-            else 
+            else
             {
                 ellipseAim.Fill = Brushes.Tomato;
             }

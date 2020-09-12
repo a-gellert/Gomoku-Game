@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="658" Width="988" ResizeMode="CanMinimize">
     <Grid>
-        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="600" Margin="10,10,0,0" VerticalAlignment="Top" Width="600" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove">
+        <Label x:Name="label1" Content="Set the Players, Please!" HorizontalAlignment="Left" Margin="125,280,0,0" VerticalAlignment="Top" FontSize="36" FontFamily="Georgia"/>
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="600" Margin="10,10,0,0" VerticalAlignment="Top" Width="600" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" d:IsHidden="True">
             <Canvas.Background>
                 <ImageBrush ImageSource="stuff/board.png"/>
             </Canvas.Background>
