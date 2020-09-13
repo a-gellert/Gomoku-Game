@@ -41,14 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Direction.cs" />
-    <Compile Include="Easy.cs" />
-    <Compile Include="GamePatterns.cs" />
-    <Compile Include="Human.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Enums\Direction.cs" />
+    <Compile Include="ExcludingPoints.cs" />
+    <Compile Include="Players\Easy.cs" />
+    <Compile Include="Game Patterns\GamePatterns.cs" />
+    <Compile Include="Players\Human.cs" />
+    <Compile Include="Players\Abstract\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Simpler.cs" />
-    <Compile Include="Medium.cs" />
+    <Compile Include="Seeker.cs" />
+    <Compile Include="Players\Medium.cs" />
     <Compile Include="Solver.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,26 +13,31 @@ namespace Gomoku.AI
         private List<Point> _potentialPoints;
         private Dictionary<Point, int> _potMoves;
         private Elements el;
-        private int _move = 1;
         private Board _board;
-        private Simpler _simpler;
+        private Seeker _simpler;
+        private ExcludingPoints _exPoints;
         Dictionary<string, int> _patterns;
+
+        private Dictionary<Point, int> _forks;
 
         public Solver(Dictionary<string, int> patterns, Colors color)
         {
+            _exPoints = new ExcludingPoints();
             _potMoves = new Dictionary<Point, int>();
+            _forks = new Dictionary<Point, int>();
             _potentialPoints = new List<Point>();
-            _simpler = new Simpler(color);
+            _simpler = new Seeker(color);
             el = color == Colors.Black ? Elements.BLACK_STONE : Elements.WHITE_STONE;
             _patterns = patterns;
         }
 
-        public Point GetMove( Board board)
+        public Point GetMove(Board board)
         {
             _potMoves.Clear();
+            _forks.Clear();
             _board = board;
 
-            ExcludePoints();
+            _potentialPoints = _exPoints.ExcludePoints(board, _potentialPoints);
             return MovesAnalize();
         }
         private Point MovesAnalize()
@@ -47,8 +52,15 @@ namespace Gomoku.AI
 
             sum = _potMoves.Aggregate((x, y) => x.Value > y.Value ? x : y).Value;
 
-            var l = _potMoves.Where((x) => x.Value == sum).Select(x => x.Key).ToList();
-            point = l[random.Next(0, l.Count)];
+            if (sum < 2000 && _forks.Count > 0)
+            {
+                point = _forks.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
+            }
+            else
+            {
+                var l = _potMoves.Where((x) => x.Value == sum).Select(x => x.Key).ToList();
+                point = l[random.Next(0, l.Count)];
+            }
 
             return point;
         }
@@ -58,7 +70,10 @@ namespace Gomoku.AI
             int y = point.Y;
 
             int cost = OnHorizontal(x, y) + OnVertical(x, y) + OnFirstDiagonal(x, y) + OnSecondDiagonal(x, y);
-
+            if (cost % 10 != 0)
+            {
+                _forks.Add(point, cost);
+            }
             return cost;
         }
 
@@ -106,91 +121,6 @@ namespace Gomoku.AI
             return 0;
         }
 
-        private void ExcludePoints()
-        {
-            for (int i = 0; i < _board.Size; i++)
-            {
-                for (int j = 0; j < _board.Size; j++)
-                {
-                    HandlePoint(i, j);
-                }
-            }
-        }
 
-        private void HandlePoint(int x, int y)
-        {
-            bool isNear = CheckNeighbours(x, y);
-
-            if (ElType(x, y) == Elements.EMPTY_CELL && !_potentialPoints.Contains(new Point(x, y)) && isNear)
-            {
-                _potentialPoints.Add(new Point(x, y));
-            }
-            else if (!(ElType(x, y) == Elements.EMPTY_CELL) && _potentialPoints.Contains(new Point(x, y)))
-            {
-                _potentialPoints.Remove(new Point(x, y));
-            }
-            else if (_move == 1 && x == 7 && y == 7)
-            {
-                _potentialPoints.Add(new Point(x, y));
-
-            }
-        }
-        private bool CheckNeighbours(int x, int y)
-        {
-            char w = (char)Elements.WHITE_STONE;
-            char b = (char)Elements.BLACK_STONE;
-
-            if (x - 1 >= 0 && (_board.GameBoard[x - 1, y] == w || _board.GameBoard[x - 1, y] == b))
-            {
-                return true;
-            }
-            if (x + 1 < _board.Size && (_board.GameBoard[x + 1, y] == w || _board.GameBoard[x + 1, y] == b))
-            {
-                return true;
-            }
-            if (y - 1 >= 0 && (_board.GameBoard[x, y - 1] == w || _board.GameBoard[x, y - 1] == b))
-            {
-                return true;
-
-            }
-            if (y + 1 < _board.Size && (_board.GameBoard[x, y + 1] == w || _board.GameBoard[x, y + 1] == b))
-            {
-                return true;
-            }
-            if (x - 1 >= 0 && y - 1 >= 0 && (_board.GameBoard[x - 1, y - 1] == w || _board.GameBoard[x - 1, y - 1] == b))
-            {
-                return true;
-            }
-            if (x + 1 < _board.Size && y + 1 < _board.Size && (_board.GameBoard[x + 1, y + 1] == w || _board.GameBoard[x + 1, y + 1] == b))
-            {
-                return true;
-            }
-            if (x + 1 < _board.Size && y - 1 >= 0 && (_board.GameBoard[x + 1, y - 1] == w || _board.GameBoard[x + 1, y - 1] == b))
-            {
-                return true;
-
-            }
-            if (x - 1 >= 0 && y + 1 < _board.Size && (_board.GameBoard[x - 1, y + 1] == w || _board.GameBoard[x - 1, y + 1] == b))
-            {
-                return true;
-            }
-            return false;
-        }
-        private Elements ElType(int x, int y)
-        {
-            if (x > _board.Size || y > _board.Size)
-            {
-                return Elements.NONE;
-            }
-            if (_board.GameBoard[x, y] == (char)Elements.BLACK_STONE)
-            {
-                return Elements.BLACK_STONE;
-            }
-            if (_board.GameBoard[x, y] == (char)Elements.WHITE_STONE)
-            {
-                return Elements.WHITE_STONE;
-            }
-            return Elements.EMPTY_CELL;
-        }
     }
 }

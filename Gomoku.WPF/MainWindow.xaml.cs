@@ -49,14 +49,16 @@ namespace Gomoku.WPF
         private Point _point;
 
         Ellipse ellipseAim;
+        Ellipse ellipseMove;
 
         public MainWindow()
         {
             _game = new GomokuGame();
             _isBlack = true;
             InitializeComponent();
+            ellipseMove = new Ellipse();
             ellipseAim = new Ellipse();
-            canvas.Visibility = Visibility.Hidden;
+            window.Background = Brushes.Gray;
         }
         private void timerStart()
         {
@@ -97,8 +99,8 @@ namespace Gomoku.WPF
                 if (_game.MakeMove(move))
                 {
                     Image black = new Image();
-                    SetImage(black, move.X, move.Y);
-                    moves.Text += liter + move.ToString();
+                    SetStoneImage(black, move.X, move.Y);
+                    moves.Text += $"{liter} ({move.X + 1}; {15 - move.Y}) ";
                     _isBlack = !_isBlack;
                     break;
                 }
@@ -186,7 +188,9 @@ namespace Gomoku.WPF
 
 
             MessageBox.Show(msg);
-            canvas.Visibility = Visibility.Collapsed;
+            window.Background = Brushes.Gray;
+
+            canvas.IsManipulationEnabled = false;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -196,7 +200,8 @@ namespace Gomoku.WPF
 
         private void Restart()
         {
-            canvas.Visibility = Visibility.Visible;
+            canvas.IsManipulationEnabled = true;
+            window.Background = Brushes.White;
 
             moves.Text = "";
             _isBlack = true;
@@ -315,18 +320,33 @@ namespace Gomoku.WPF
                 _secondIsBot = true;
             }
         }
-        private void SetImage(Image image, int x, int y)
+        private void SetStoneImage(Image image, int x, int y)
         {
             if (x > 14 || x < 0 || y > 14 || y < 0)
             {
                 return;
             }
+
+            if (canvas.Children.Contains(ellipseMove))
+            {
+                canvas.Children.Remove(ellipseMove);
+            }
+
+            ellipseMove.Width = 12;
+            ellipseMove.Height = 12;
+            ellipseMove.StrokeThickness = 3;
+            ellipseMove.Stroke = Brushes.IndianRed;
+            ellipseMove.Fill = Brushes.Black;
+            Canvas.SetLeft(ellipseMove, x * Offset + Border+10);
+            Canvas.SetTop(ellipseMove, y * Offset + Border+10);
+
             string imgSource = _isBlack ? @"C:\Users\Admin\source\repos\Gomoku\Gomoku.WPF\stuff\circleBlack.png" : @"C:\Users\Admin\source\repos\Gomoku\Gomoku.WPF\stuff\circleWhite.png";
             image.Width = 32;
             image.Source = new BitmapImage(new Uri(imgSource));
             Canvas.SetLeft(image, x * Offset + Border);
             Canvas.SetTop(image, y * Offset + Border);
             canvas.Children.Add(image);
+            canvas.Children.Add(ellipseMove);
         }
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
@@ -357,8 +377,7 @@ namespace Gomoku.WPF
 
             if (canvas.Children.Contains(ellipseAim))
             {
-                var i = canvas.Children.IndexOf(ellipseAim);
-                canvas.Children.RemoveAt(i);
+                canvas.Children.Remove(ellipseAim);
             }
 
             ellipseAim.Width = 32;

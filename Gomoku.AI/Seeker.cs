@@ -4,12 +4,12 @@ using Gomoku.Core.Enums;
 
 namespace Gomoku.AI
 {
-    public class Simpler
+    public class Seeker
     {
         private int _depth = 5;
         private bool _iAmBlack = true;
 
-        public Simpler(Colors color)
+        public Seeker(Colors color)
         {
             _iAmBlack = color == Colors.Black ? true : false;
         }
